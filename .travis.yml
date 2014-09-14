@@ -4,6 +4,7 @@ go:
 install:
 - go get -v github.com/orchestrate-io/gorc
 - go get -v github.com/joho/godotenv
+- go get -v github.com/handshakejs/handshakejserrors
 - go get -v ./...
 env:
   global:

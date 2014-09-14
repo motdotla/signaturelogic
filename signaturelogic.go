@@ -21,6 +21,34 @@ func Setup(orchestrate_api_key string) {
 	ORCHESTRATE_API_KEY = orchestrate_api_key
 }
 
+func DocumentsUpdate(new_document map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
+	conn := Conn()
+	result, err := conn.Get(DOCUMENTS, new_document["id"].(string))
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	document := make(map[string]interface{})
+	err = result.Value(&document)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	document["pages"] = new_document["pages"]
+	document["status"] = new_document["status"]
+
+	conn = Conn()
+	_, err = conn.Put(DOCUMENTS, document["id"].(string), document)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return document, nil
+}
+
 func DocumentsCreate(document map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
 	var url string
 	if str, ok := document["url"].(string); ok {
@@ -40,7 +68,6 @@ func DocumentsCreate(document map[string]interface{}) (map[string]interface{}, *
 	document["id"] = key
 
 	conn := Conn()
-
 	_, err := conn.Put(DOCUMENTS, document["id"].(string), document)
 	if err != nil {
 		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}

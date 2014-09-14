@@ -2,6 +2,7 @@ package signaturelogic_test
 
 import (
 	"../signaturelogic"
+	"github.com/handshakejs/handshakejserrors"
 	"github.com/joho/godotenv"
 	"github.com/orchestrate-io/gorc"
 	"log"
@@ -75,6 +76,58 @@ func TestDocumentsCreateInvalidOrchestrateApiKey(t *testing.T) {
 	if logic_error.Code != "unknown" {
 		t.Errorf("Error code was not 'unknown'")
 	}
+}
+
+func TestDocumentsUpdate(t *testing.T) {
+	setup(t)
+	tearDown(t)
+	result, logic_error := createDocument(t)
+	if logic_error != nil {
+		t.Errorf("createDocument failed.")
+	}
+
+	id := result["id"].(string)
+	pages := []interface{}{}
+	page := map[string]interface{}{"sort": 1, "url": "https://carvedevelopment.s3.amazonaws.com/87911158-edbc-488b-6e60-960d67809107/1.png"}
+	pages = append(pages, page)
+	document := map[string]interface{}{"id": id, "pages": pages, "status": "processed"}
+
+	result, logic_error = signaturelogic.DocumentsUpdate(document)
+	if logic_error != nil {
+		t.Errorf("there was an error")
+	}
+
+	if result["status"].(string) != "processed" {
+		t.Errorf("status did not equal processed")
+	}
+}
+
+func TestDocumentsUpdateIdDoesNotExist(t *testing.T) {
+	setup(t)
+	tearDown(t)
+
+	id := "does-not-exist"
+	pages := []interface{}{}
+	page := map[string]interface{}{"sort": 1, "url": "https://carvedevelopment.s3.amazonaws.com/87911158-edbc-488b-6e60-960d67809107/1.png"}
+	pages = append(pages, page)
+	document := map[string]interface{}{"id": id, "pages": pages, "status": "processed"}
+
+	_, logic_error := signaturelogic.DocumentsUpdate(document)
+	if logic_error.Code != "unknown" {
+		t.Errorf("Error", "Logic error should have been 'unknown'")
+	}
+}
+
+func createDocument(t *testing.T) (map[string]interface{}, *handshakejserrors.LogicError) {
+	document := map[string]interface{}{"url": URL}
+
+	signaturelogic.Setup(os.Getenv("ORCHESTRATE_API_KEY"))
+	result, logic_error := signaturelogic.DocumentsCreate(document)
+	if logic_error != nil {
+		return nil, logic_error
+	}
+
+	return result, nil
 }
 
 func tearDown(t *testing.T) {
