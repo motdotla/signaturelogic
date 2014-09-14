@@ -36,11 +36,12 @@ func DocumentsCreate(document map[string]interface{}) (map[string]interface{}, *
 	document["pages"] = pages
 	document["status"] = PROCESSING
 	document["url"] = url
+	key := uuid.New()
+	document["id"] = key
 
 	conn := Conn()
 
-	key := uuid.New()
-	_, err := conn.Put(DOCUMENTS, key, document)
+	_, err := conn.Put(DOCUMENTS, document["id"].(string), document)
 	if err != nil {
 		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
 		return nil, logic_error

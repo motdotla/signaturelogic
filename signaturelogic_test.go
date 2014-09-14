@@ -30,6 +30,12 @@ func TestDocumentsCreate(t *testing.T) {
 	if result["status"] != "processing" {
 		t.Errorf("Incorrect status " + result["status"].(string))
 	}
+	if result["id"] == nil {
+		t.Errorf("Missing ID")
+	}
+	if result["id"] == "" {
+		t.Errorf("Missing ID")
+	}
 }
 
 func TestDocumentsCreateNilUrl(t *testing.T) {
