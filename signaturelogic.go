@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	DOCUMENTS = "documents"
+	DOCUMENTS  = "documents"
+	PROCESSING = "processing"
 )
 
 var (
@@ -31,6 +32,9 @@ func DocumentsCreate(document map[string]interface{}) (map[string]interface{}, *
 		logic_error := &handshakejserrors.LogicError{"required", "url", "url cannot be blank"}
 		return document, logic_error
 	}
+	pages := []string{}
+	document["pages"] = pages
+	document["status"] = PROCESSING
 	document["url"] = url
 
 	conn := Conn()

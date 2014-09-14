@@ -27,6 +27,9 @@ func TestDocumentsCreate(t *testing.T) {
 	if result["url"] != URL {
 		t.Errorf("Incorrect url " + result["url"].(string))
 	}
+	if result["status"] != "processing" {
+		t.Errorf("Incorrect status " + result["status"].(string))
+	}
 }
 
 func TestDocumentsCreateNilUrl(t *testing.T) {
