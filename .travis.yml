@@ -1,7 +1,10 @@
 language: go
-
 go:
-  - tip
-
+- tip
 install:
-  - go get -v ./...
+- go get -v github.com/orchestrate-io/gorc
+- go get -v github.com/joho/godotenv
+- go get -v ./...
+env:
+  global:
+    secure: q3b+rwqIltoOfMUvVZ3cJ8cd7zAqNg2efUj1iATkmgcqVHaJ1t8ZHzZ6wcCHkowAapedMrnucN7b4VMyskMjfgLmTfWvpjJceiDGKwjRNtiPz9M7QY1ImF2bGShxBkxc08lxMj/R232cSIkmD7awBGyvDtMnx3/WH87mQuvw7vY=
