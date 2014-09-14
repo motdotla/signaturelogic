@@ -21,9 +21,9 @@ func Setup(orchestrate_api_key string) {
 	ORCHESTRATE_API_KEY = orchestrate_api_key
 }
 
-func DocumentsUpdate(new_document map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
+func DocumentsShow(id string) (map[string]interface{}, *handshakejserrors.LogicError) {
 	conn := Conn()
-	result, err := conn.Get(DOCUMENTS, new_document["id"].(string))
+	result, err := conn.Get(DOCUMENTS, id)
 	if err != nil {
 		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
 		return nil, logic_error
@@ -36,11 +36,20 @@ func DocumentsUpdate(new_document map[string]interface{}) (map[string]interface{
 		return nil, logic_error
 	}
 
+	return document, nil
+}
+
+func DocumentsUpdate(new_document map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
+
+	document, logic_error := DocumentsShow(new_document["id"].(string))
+	if logic_error != nil {
+		return nil, logic_error
+	}
 	document["pages"] = new_document["pages"]
 	document["status"] = new_document["status"]
 
-	conn = Conn()
-	_, err = conn.Put(DOCUMENTS, document["id"].(string), document)
+	conn := Conn()
+	_, err := conn.Put(DOCUMENTS, document["id"].(string), document)
 	if err != nil {
 		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
 		return nil, logic_error

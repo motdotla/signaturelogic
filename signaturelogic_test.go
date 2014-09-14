@@ -78,12 +78,42 @@ func TestDocumentsCreateInvalidOrchestrateApiKey(t *testing.T) {
 	}
 }
 
-func TestDocumentsUpdate(t *testing.T) {
+func TestDocumentsShow(t *testing.T) {
 	setup(t)
 	tearDown(t)
 	result, logic_error := createDocument(t)
 	if logic_error != nil {
 		t.Errorf("createDocument failed.")
+	}
+
+	id := result["id"].(string)
+	result, _ = signaturelogic.DocumentsShow(id)
+	if result["url"].(string) != URL {
+		t.Errorf("returned url was incorrect")
+	}
+}
+
+func TestDocumentsShowWrongId(t *testing.T) {
+	setup(t)
+	tearDown(t)
+	_, logic_error := createDocument(t)
+	if logic_error != nil {
+		t.Errorf("createDocument failed.")
+	}
+
+	_, logic_error = signaturelogic.DocumentsShow("wrong-id")
+	if logic_error == nil {
+		t.Errorf("logic error should have been raised")
+	}
+}
+
+func TestDocumentsUpdate(t *testing.T) {
+	setup(t)
+	tearDown(t)
+
+	result, logic_error := createDocument(t)
+	if logic_error != nil {
+		t.Errorf("Error", logic_error)
 	}
 
 	id := result["id"].(string)
@@ -94,7 +124,7 @@ func TestDocumentsUpdate(t *testing.T) {
 
 	result, logic_error = signaturelogic.DocumentsUpdate(document)
 	if logic_error != nil {
-		t.Errorf("there was an error")
+		t.Errorf("Error", logic_error)
 	}
 
 	if result["status"].(string) != "processed" {

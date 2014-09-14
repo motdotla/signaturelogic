@@ -14,7 +14,7 @@ This library is part of the larger [signature-api ecosystem](https://github.com/
 package main
 
 import (
-  "fmt"
+  "log"
   "github.com/motdotla/signaturelogic"
 )
 
@@ -24,9 +24,9 @@ func main() {
   document := map[string]interface{}{"url": "http://mot.la/assets/resume.pdf"}
   result, logic_error := signaturelogic.DocumentsCreate(document)
   if logic_error != nil {
-    fmt.Println(logic_error)
+    log.Println(logic_error)
   }
-  fmt.Println(result)
+  log.Println(result)
 }
 ```
 
@@ -43,6 +43,12 @@ signaturelogic.Setup("ORCHESTRATE_API_KEY")
 ```go
 document := map[string]interface{}{"url": "http://mot.la/assets/resume.pdf"}
 result, logic_error := signaturelogic.DocumentsCreate(document)
+```
+
+### DocumentsShow
+
+```go
+result, logic_error := signaturelogic.DocumentsShow("ID-OF-DOCUMENT")
 ```
 
 ### DocumentsUpdate
