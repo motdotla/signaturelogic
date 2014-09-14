@@ -35,15 +35,14 @@ func main() {
 Connects to Orchestrate.
 
 ```go
-options := signaturelogic.Options{}
-signaturelogic.Setup("ORCHESTRATE_API_KEY", options)
+signaturelogic.Setup("ORCHESTRATE_API_KEY")
 ```
 
 ### DocumentsCreate
 
 ```go
 document := map[string]interface{}{"url": "http://mot.la/assets/resume.pdf"}
-result, logic_error := signaturelogic.DocumentsCreate(app)
+result, logic_error := signaturelogic.DocumentsCreate(document)
 ```
 
 ## Installation
@@ -63,14 +62,3 @@ Edit the contents of `.env`.
 ```
 go test -v
 ```
-
-## Database Schema Details (using Redis)
-
-signaturelogic uses a purposely simple database schema - as simple as possible. If you know a simpler approach, even better, please let me know or share as a pull request. 
-
-signaturelogic uses Redis because of its light footprint, ephemeral nature, and lack of migrations.
-
-* apps - collection of keys with all the app_names in there. SADD
-* apps/myappname - hash with all the data in there. HSET or HMSET
-* apps/theappname/identities - collection of keys with all the identities' emails in there. SADD
-* apps/theappname/identities/emailaddress HSET or HMSET
