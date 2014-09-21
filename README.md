@@ -56,7 +56,7 @@ result, logic_error := signaturelogic.DocumentsShow("ID-OF-DOCUMENT")
 ```go
 id := "existing-id"
 pages := []interface{}{}
-page := map[string]interface{}{"sort": 1, "url": "https://carvedevelopment.s3.amazonaws.com/87911158-edbc-488b-6e60-960d67809107/1.png"}
+page := map[string]interface{}{"number": 1, "url": "https://carvedevelopment.s3.amazonaws.com/87911158-edbc-488b-6e60-960d67809107/1.png"}
 pages = append(pages, page)
 document := map[string]interface{}{"pages": pages, "status": "processed"}
 

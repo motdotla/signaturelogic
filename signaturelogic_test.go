@@ -118,7 +118,7 @@ func TestDocumentsUpdate(t *testing.T) {
 
 	id := result["id"].(string)
 	pages := []interface{}{}
-	page := map[string]interface{}{"sort": 1, "url": "https://carvedevelopment.s3.amazonaws.com/87911158-edbc-488b-6e60-960d67809107/1.png"}
+	page := map[string]interface{}{"number": 1, "url": "https://carvedevelopment.s3.amazonaws.com/87911158-edbc-488b-6e60-960d67809107/1.png"}
 	pages = append(pages, page)
 	document := map[string]interface{}{"id": id, "pages": pages, "status": "processed"}
 
@@ -138,7 +138,7 @@ func TestDocumentsUpdateIdDoesNotExist(t *testing.T) {
 
 	id := "does-not-exist"
 	pages := []interface{}{}
-	page := map[string]interface{}{"sort": 1, "url": "https://carvedevelopment.s3.amazonaws.com/87911158-edbc-488b-6e60-960d67809107/1.png"}
+	page := map[string]interface{}{"number": 1, "url": "https://carvedevelopment.s3.amazonaws.com/87911158-edbc-488b-6e60-960d67809107/1.png"}
 	pages = append(pages, page)
 	document := map[string]interface{}{"id": id, "pages": pages, "status": "processed"}
 
