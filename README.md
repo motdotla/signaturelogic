@@ -70,6 +70,12 @@ signing := map[string]interface{}{"document_id": "12356"}
 result, logic_error := signaturelogic.SigningsCreate(signing)
 ```
 
+### SigningsShow
+
+```go
+result, logic_error := signaturelogic.SigningsShow("ID-OF-SIGNING")
+```
+
 ### SignatureElementsCreate
 
 ```go

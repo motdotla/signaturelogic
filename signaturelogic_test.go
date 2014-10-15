@@ -215,6 +215,21 @@ func TestSignatureElementsCreate(t *testing.T) {
 	}
 }
 
+func TestSigningsShow(t *testing.T) {
+	setup(t)
+	tearDown(t)
+	result, logic_error := createSigning(t)
+	if logic_error != nil {
+		t.Errorf("createSigning failed.")
+	}
+
+	id := result["id"].(string)
+	result, _ = signaturelogic.SigningsShow(id)
+	if result["document_id"].(string) != DOCUMENT_ID {
+		t.Errorf("returned document_id was incorrect")
+	}
+}
+
 func createDocument(t *testing.T) (map[string]interface{}, *handshakejserrors.LogicError) {
 	document := map[string]interface{}{"url": URL}
 
@@ -227,6 +242,17 @@ func createDocument(t *testing.T) (map[string]interface{}, *handshakejserrors.Lo
 	return result, nil
 }
 
+func createSigning(t *testing.T) (map[string]interface{}, *handshakejserrors.LogicError) {
+	signing := map[string]interface{}{"document_id": DOCUMENT_ID}
+
+	signaturelogic.Setup(os.Getenv("ORCHESTRATE_API_KEY"))
+	result, logic_error := signaturelogic.SigningsCreate(signing)
+	if logic_error != nil {
+		return nil, logic_error
+	}
+
+	return result, nil
+}
 func tearDown(t *testing.T) {
 	orchestrate_api_key := os.Getenv("ORCHESTRATE_API_KEY")
 	o := gorc.NewClient(orchestrate_api_key)

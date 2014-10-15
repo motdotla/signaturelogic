@@ -88,6 +88,24 @@ func DocumentsCreate(document map[string]interface{}) (map[string]interface{}, *
 	return document, nil
 }
 
+func SigningsShow(id string) (map[string]interface{}, *handshakejserrors.LogicError) {
+	conn := Conn()
+	result, err := conn.Get(SIGNINGS, id)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	signing := make(map[string]interface{})
+	err = result.Value(&signing)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return signing, nil
+}
+
 func SigningsCreate(signing map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
 	var document_id string
 	if str, ok := signing["document_id"].(string); ok {
