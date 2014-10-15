@@ -107,14 +107,14 @@ func SigningsShow(id string) (map[string]interface{}, *handshakejserrors.LogicEr
 }
 
 func SigningsCreate(signing map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
-	var document_id string
-	if str, ok := signing["document_id"].(string); ok {
-		document_id = strings.Replace(str, " ", "", -1)
+	var document_url string
+	if str, ok := signing["document_url"].(string); ok {
+		document_url = strings.Replace(str, " ", "", -1)
 	} else {
-		document_id = ""
+		document_url = ""
 	}
-	if document_id == "" {
-		logic_error := &handshakejserrors.LogicError{"required", "document_id", "document_id cannot be blank"}
+	if document_url == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "document_url", "document_url cannot be blank"}
 		return signing, logic_error
 	}
 
@@ -122,7 +122,7 @@ func SigningsCreate(signing map[string]interface{}) (map[string]interface{}, *ha
 	text_elements := []string{}
 	signing["signature_elements"] = signature_elements
 	signing["text_elements"] = text_elements
-	signing["document_id"] = document_id
+	signing["document_url"] = document_url
 	key := uuid.New()
 	signing["id"] = key
 

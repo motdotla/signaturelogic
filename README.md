@@ -66,7 +66,7 @@ result, logic_error := signaturelogic.DocumentsUpdate(document)
 ### SigningsCreate
 
 ```go
-signing := map[string]interface{}{"document_id": "12356"}
+signing := map[string]interface{}{"document_url": "https://signature-api.herokuapp.com/api/v0/documents/ef7ba0c7-dab7-425a-b849-d8157c40cd83.json"}
 result, logic_error := signaturelogic.SigningsCreate(signing)
 ```
 
