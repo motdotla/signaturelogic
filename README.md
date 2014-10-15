@@ -73,7 +73,7 @@ result, logic_error := signaturelogic.SigningsCreate(signing)
 ### SignatureElementsCreate
 
 ```go
-signature_element := map[string]interface{}{"x": "20", "y": "20", "url": "data:image/gif;base64,R0lGODlhRAIEAaIAAOLi1v7..", "page_number": "1"}
+signature_element := map[string]interface{}{"x": "20", "y": "20", "url": "data:image/gif;base64,R0lGODlhRAIEAaIAAOLi1v7..", "page_number": "1", "signing_id": "123456"}
 result, logic_error := signaturelogic.SignatureElementsCreate(signature_element)
 ```
 
