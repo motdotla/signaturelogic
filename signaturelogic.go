@@ -118,11 +118,11 @@ func SigningsCreate(signing map[string]interface{}) (map[string]interface{}, *ha
 		return signing, logic_error
 	}
 
-	signing["document_id"] = document_id
 	signature_elements := []string{}
 	text_elements := []string{}
 	signing["signature_elements"] = signature_elements
 	signing["text_elements"] = text_elements
+	signing["document_id"] = document_id
 	key := uuid.New()
 	signing["id"] = key
 
