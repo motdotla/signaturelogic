@@ -119,6 +119,7 @@ func SignatureElementsCreate(signature_element map[string]interface{}) (map[stri
 	var y string
 	var url string
 	var page_number string
+	var signing_id string
 	if str, ok := signature_element["x"].(string); ok {
 		x = strings.Replace(str, " ", "", -1)
 	} else {
@@ -158,10 +159,21 @@ func SignatureElementsCreate(signature_element map[string]interface{}) (map[stri
 		logic_error := &handshakejserrors.LogicError{"required", "page_number", "page_number cannot be blank"}
 		return signature_element, logic_error
 	}
+
+	if str, ok := signature_element["signing_id"].(string); ok {
+		signing_id = strings.Replace(str, " ", "", -1)
+	} else {
+		signing_id = ""
+	}
+	if signing_id == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "signing_id", "signing_id cannot be blank"}
+		return signature_element, logic_error
+	}
 	signature_element["x"] = x
 	signature_element["y"] = y
 	signature_element["url"] = url
 	signature_element["page_number"] = page_number
+	signature_element["signing_id"] = signing_id
 	key := uuid.New()
 	signature_element["id"] = key
 
