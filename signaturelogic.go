@@ -119,10 +119,12 @@ func SigningsCreate(signing map[string]interface{}) (map[string]interface{}, *ha
 	}
 
 	signing["document_id"] = document_id
+	signature_elements := []string{}
+	text_elements := []string{}
+	signing["signature_elements"] = signature_elements
+	signing["text_elements"] = text_elements
 	key := uuid.New()
 	signing["id"] = key
-	signing["signature_elements"] = []interface{}{}
-	signing["text_elements"] = []interface{}{}
 
 	conn := Conn()
 	_, err := conn.Put(SIGNINGS, signing["id"].(string), signing)
