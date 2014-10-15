@@ -63,6 +63,13 @@ document := map[string]interface{}{"pages": pages, "status": "processed"}
 result, logic_error := signaturelogic.DocumentsUpdate(document)
 ```
 
+### SigningsCreate
+
+```go
+signing := map[string]interface{}{"document_id": "12356"}
+result, logic_error := signaturelogic.SigningsCreate(signing)
+```
+
 ### SignatureElementsCreate
 
 ```go

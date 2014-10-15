@@ -10,6 +10,7 @@ import (
 const (
 	DOCUMENTS          = "documents"
 	SIGNATURE_ELEMENTS = "signature_elements"
+	SIGNINGS           = "signings"
 	PROCESSING         = "processing"
 )
 
@@ -85,6 +86,32 @@ func DocumentsCreate(document map[string]interface{}) (map[string]interface{}, *
 	}
 
 	return document, nil
+}
+
+func SigningsCreate(signing map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
+	var document_id string
+	if str, ok := signing["document_id"].(string); ok {
+		document_id = strings.Replace(str, " ", "", -1)
+	} else {
+		document_id = ""
+	}
+	if document_id == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "document_id", "document_id cannot be blank"}
+		return signing, logic_error
+	}
+
+	signing["document_id"] = document_id
+	key := uuid.New()
+	signing["id"] = key
+
+	conn := Conn()
+	_, err := conn.Put(SIGNINGS, signing["id"].(string), signing)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return signing, nil
 }
 
 func SignatureElementsCreate(signature_element map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
