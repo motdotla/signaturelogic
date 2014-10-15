@@ -63,6 +63,13 @@ document := map[string]interface{}{"pages": pages, "status": "processed"}
 result, logic_error := signaturelogic.DocumentsUpdate(document)
 ```
 
+### SignatureElementsCreate
+
+```go
+signature_element := map[string]interface{}{"x": "20", "y": "20", "url": "data:image/gif;base64,R0lGODlhRAIEAaIAAOLi1v7..", "page_number": "1"}
+result, logic_error := signaturelogic.SignatureElementsCreate(signature_element)
+```
+
 ## Installation
 
 ```

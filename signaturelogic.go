@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	DOCUMENTS  = "documents"
-	PROCESSING = "processing"
+	DOCUMENTS          = "documents"
+	SIGNATURE_ELEMENTS = "signature_elements"
+	PROCESSING         = "processing"
 )
 
 var (
@@ -84,6 +85,67 @@ func DocumentsCreate(document map[string]interface{}) (map[string]interface{}, *
 	}
 
 	return document, nil
+}
+
+func SignatureElementsCreate(signature_element map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
+	var x string
+	var y string
+	var url string
+	var page_number string
+	if str, ok := signature_element["x"].(string); ok {
+		x = strings.Replace(str, " ", "", -1)
+	} else {
+		x = ""
+	}
+	if x == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "x", "x cannot be blank"}
+		return signature_element, logic_error
+	}
+
+	if str, ok := signature_element["y"].(string); ok {
+		y = strings.Replace(str, " ", "", -1)
+	} else {
+		y = ""
+	}
+	if y == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "y", "y cannot be blank"}
+		return signature_element, logic_error
+	}
+
+	if str, ok := signature_element["url"].(string); ok {
+		url = strings.Replace(str, " ", "", -1)
+	} else {
+		url = ""
+	}
+	if url == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "url", "url cannot be blank"}
+		return signature_element, logic_error
+	}
+
+	if str, ok := signature_element["page_number"].(string); ok {
+		page_number = strings.Replace(str, " ", "", -1)
+	} else {
+		page_number = ""
+	}
+	if page_number == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "page_number", "page_number cannot be blank"}
+		return signature_element, logic_error
+	}
+	signature_element["x"] = x
+	signature_element["y"] = y
+	signature_element["url"] = url
+	signature_element["page_number"] = page_number
+	key := uuid.New()
+	signature_element["id"] = key
+
+	conn := Conn()
+	_, err := conn.Put(SIGNATURE_ELEMENTS, signature_element["id"].(string), signature_element)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return signature_element, nil
 }
 
 func Conn() *gorc.Client {
