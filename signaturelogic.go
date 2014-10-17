@@ -113,7 +113,7 @@ func SigningsShow(id string) (map[string]interface{}, *handshakejserrors.LogicEr
 	}
 
 	conn = Conn()
-	results, err := conn.Search(SIGNATURE_ELEMENTS, "signing_id:"+id, 1000, 0)
+	results, err := conn.Search(SIGNATURE_ELEMENTS, "value.signing_id="+id, 10, 0)
 	if err != nil {
 		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
 		return nil, logic_error
