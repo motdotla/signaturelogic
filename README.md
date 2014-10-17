@@ -98,6 +98,14 @@ text_element := map[string]interface{}{"x": "20", "y": "20", "content": "Some co
 result, logic_error := signaturelogic.TextElementsCreate(text_element)
 ```
 
+### TextElementsUpdate
+
+```go
+text_element := map[string]interface{}{"x": "50", "y": "52", "id": "some-id"}
+
+result, logic_error := signaturelogic.TextElementsUpdate(text_element)
+```
+
 ## Installation
 
 ```

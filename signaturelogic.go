@@ -338,6 +338,64 @@ func TextElementsCreate(text_element map[string]interface{}) (map[string]interfa
 	return text_element, nil
 }
 
+func TextElementsShow(id string) (map[string]interface{}, *handshakejserrors.LogicError) {
+	conn := Conn()
+	result, err := conn.Get(TEXT_ELEMENTS, id)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	signature_element := make(map[string]interface{})
+	err = result.Value(&signature_element)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return signature_element, nil
+}
+
+func TextElementsUpdate(new_text_element map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
+	text_element, logic_error := TextElementsShow(new_text_element["id"].(string))
+	if logic_error != nil {
+		return nil, logic_error
+	}
+
+	var x string
+	var y string
+	if str, ok := new_text_element["x"].(string); ok {
+		x = strings.Replace(str, " ", "", -1)
+	} else {
+		x = ""
+	}
+	if x == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "x", "x cannot be blank"}
+		return new_text_element, logic_error
+	}
+
+	if str, ok := new_text_element["y"].(string); ok {
+		y = strings.Replace(str, " ", "", -1)
+	} else {
+		y = ""
+	}
+	if y == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "y", "y cannot be blank"}
+		return new_text_element, logic_error
+	}
+
+	text_element["x"] = x
+	text_element["y"] = y
+
+	conn := Conn()
+	_, err := conn.Put(TEXT_ELEMENTS, text_element["id"].(string), text_element)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return text_element, nil
+}
 func Conn() *gorc.Client {
 	client := gorc.NewClient(ORCHESTRATE_API_KEY)
 	return client
