@@ -10,6 +10,7 @@ import (
 const (
 	DOCUMENTS          = "documents"
 	SIGNATURE_ELEMENTS = "signature_elements"
+	TEXT_ELEMENTS      = "text_elements"
 	SIGNINGS           = "signings"
 	PROCESSING         = "processing"
 )
@@ -207,6 +208,75 @@ func SignatureElementsCreate(signature_element map[string]interface{}) (map[stri
 	}
 
 	return signature_element, nil
+}
+
+func TextElementsCreate(text_element map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
+	var x string
+	var y string
+	var content string
+	var page_number string
+	var signing_id string
+	if str, ok := text_element["x"].(string); ok {
+		x = strings.Replace(str, " ", "", -1)
+	} else {
+		x = ""
+	}
+	if x == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "x", "x cannot be blank"}
+		return text_element, logic_error
+	}
+
+	if str, ok := text_element["y"].(string); ok {
+		y = strings.Replace(str, " ", "", -1)
+	} else {
+		y = ""
+	}
+	if y == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "y", "y cannot be blank"}
+		return text_element, logic_error
+	}
+
+	content = text_element["content"].(string)
+	if content == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "content", "content cannot be blank"}
+		return text_element, logic_error
+	}
+
+	if str, ok := text_element["page_number"].(string); ok {
+		page_number = strings.Replace(str, " ", "", -1)
+	} else {
+		page_number = ""
+	}
+	if page_number == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "page_number", "page_number cannot be blank"}
+		return text_element, logic_error
+	}
+
+	if str, ok := text_element["signing_id"].(string); ok {
+		signing_id = strings.Replace(str, " ", "", -1)
+	} else {
+		signing_id = ""
+	}
+	if signing_id == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "signing_id", "signing_id cannot be blank"}
+		return text_element, logic_error
+	}
+	text_element["x"] = x
+	text_element["y"] = y
+	text_element["content"] = content
+	text_element["page_number"] = page_number
+	text_element["signing_id"] = signing_id
+	key := uuid.New()
+	text_element["id"] = key
+
+	conn := Conn()
+	_, err := conn.Put(TEXT_ELEMENTS, text_element["id"].(string), text_element)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return text_element, nil
 }
 
 func Conn() *gorc.Client {

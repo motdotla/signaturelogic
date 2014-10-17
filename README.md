@@ -83,6 +83,13 @@ signature_element := map[string]interface{}{"x": "20", "y": "20", "url": "data:i
 result, logic_error := signaturelogic.SignatureElementsCreate(signature_element)
 ```
 
+### TextElementsCreate
+
+```go
+text_element := map[string]interface{}{"x": "20", "y": "20", "content": "Some content", "page_number": "1", "signing_id": "123456"}
+result, logic_error := signaturelogic.TextElementsCreate(text_element)
+```
+
 ## Installation
 
 ```
