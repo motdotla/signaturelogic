@@ -16,6 +16,7 @@ const (
 )
 
 type SignatureElement struct {
+	Id         string `form:"id" json:"id"`
 	X          string `form:"x" json:"x"`
 	Y          string `form:"y" json:"y"`
 	Url        string `form:"url" json:"url"`
@@ -23,6 +24,7 @@ type SignatureElement struct {
 }
 
 type TextElement struct {
+	Id         string `form:"id" json:"id"`
 	X          string `form:"x" json:"x"`
 	Y          string `form:"y" json:"y"`
 	Content    string `form:"content" json:"content"`
