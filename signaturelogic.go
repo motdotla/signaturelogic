@@ -20,7 +20,13 @@ type SignatureElement struct {
 	Y          string `form:"y" json:"y"`
 	Url        string `form:"url" json:"url"`
 	PageNumber string `form:"page_number" json:"page_number"`
-	SigningId  string `form:"signing_id" json:"signing_id"`
+}
+
+type TextElement struct {
+	X          string `form:"x" json:"x"`
+	Y          string `form:"y" json:"y"`
+	Content    string `form:"content" json:"content"`
+	PageNumber string `form:"page_number" json:"page_number"`
 }
 
 var (
@@ -119,13 +125,17 @@ func SigningsShow(id string) (map[string]interface{}, *handshakejserrors.LogicEr
 		return nil, logic_error
 	}
 
-	// here is where I need to get all the signature_elements
 	signature_elements := make([]SignatureElement, len(results.Results))
 	for i, item := range results.Results {
 		item.Value(&signature_elements[i])
 	}
 	signing["signature_elements"] = signature_elements
-	// here is where I need to get all the text_elements
+
+	text_elements := make([]TextElement, len(results.Results))
+	for i, item := range results.Results {
+		item.Value(&text_elements[i])
+	}
+	signing["text_elements"] = text_elements
 
 	return signing, nil
 }
