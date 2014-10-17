@@ -124,13 +124,18 @@ func SigningsShow(id string) (map[string]interface{}, *handshakejserrors.LogicEr
 		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
 		return nil, logic_error
 	}
-
 	signature_elements := make([]SignatureElement, len(results.Results))
 	for i, item := range results.Results {
 		item.Value(&signature_elements[i])
 	}
 	signing["signature_elements"] = signature_elements
 
+	conn = Conn()
+	results, err = conn.Search(TEXT_ELEMENTS, "value.signing_id="+id, 10, 0)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
 	text_elements := make([]TextElement, len(results.Results))
 	for i, item := range results.Results {
 		item.Value(&text_elements[i])
