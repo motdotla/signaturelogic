@@ -15,6 +15,14 @@ const (
 	PROCESSING         = "processing"
 )
 
+type SignatureElement struct {
+	X          string
+	Y          string
+	Url        string
+	PageNumber string
+	SigningId  string
+}
+
 var (
 	ORCHESTRATE_API_KEY string
 	client              *gorc.Client
@@ -103,6 +111,21 @@ func SigningsShow(id string) (map[string]interface{}, *handshakejserrors.LogicEr
 		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
 		return nil, logic_error
 	}
+
+	conn = Conn()
+	results, err := conn.Search(SIGNATURE_ELEMENTS, "signing_id:"+id, 1000, 0)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	// here is where I need to get all the signature_elements
+	signature_elements := make([]SignatureElement, len(results.Results))
+	for i, item := range results.Results {
+		item.Value(&signature_elements[i])
+	}
+	signing["signature_elements"] = signature_elements
+	// here is where I need to get all the text_elements
 
 	return signing, nil
 }
