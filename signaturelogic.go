@@ -16,11 +16,11 @@ const (
 )
 
 type SignatureElement struct {
-	X          string
-	Y          string
-	Url        string
-	PageNumber string
-	SigningId  string
+	X          string `form:"x" json:"x"`
+	Y          string `form:"y" json:"y"`
+	Url        string `form:"url" json:"url"`
+	PageNumber string `form:"page_number" json:"page_number"`
+	SigningId  string `form:"signing_id" json:"signing_id"`
 }
 
 var (
