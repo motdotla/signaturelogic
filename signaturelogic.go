@@ -210,6 +210,65 @@ func SignatureElementsCreate(signature_element map[string]interface{}) (map[stri
 	return signature_element, nil
 }
 
+func SignatureElementsShow(id string) (map[string]interface{}, *handshakejserrors.LogicError) {
+	conn := Conn()
+	result, err := conn.Get(SIGNATURE_ELEMENTS, id)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	signature_element := make(map[string]interface{})
+	err = result.Value(&signature_element)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return signature_element, nil
+}
+
+func SignatureElementsUpdate(new_signature_element map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
+	signature_element, logic_error := SignatureElementsShow(new_signature_element["id"].(string))
+	if logic_error != nil {
+		return nil, logic_error
+	}
+
+	var x string
+	var y string
+	if str, ok := new_signature_element["x"].(string); ok {
+		x = strings.Replace(str, " ", "", -1)
+	} else {
+		x = ""
+	}
+	if x == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "x", "x cannot be blank"}
+		return new_signature_element, logic_error
+	}
+
+	if str, ok := new_signature_element["y"].(string); ok {
+		y = strings.Replace(str, " ", "", -1)
+	} else {
+		y = ""
+	}
+	if y == "" {
+		logic_error := &handshakejserrors.LogicError{"required", "y", "y cannot be blank"}
+		return new_signature_element, logic_error
+	}
+
+	signature_element["x"] = x
+	signature_element["y"] = y
+
+	conn := Conn()
+	_, err := conn.Put(SIGNATURE_ELEMENTS, signature_element["id"].(string), signature_element)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return signature_element, nil
+}
+
 func TextElementsCreate(text_element map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
 	var x string
 	var y string

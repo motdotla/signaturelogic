@@ -58,7 +58,7 @@ id := "existing-id"
 pages := []interface{}{}
 page := map[string]interface{}{"number": 1, "url": "https://carvedevelopment.s3.amazonaws.com/87911158-edbc-488b-6e60-960d67809107/1.png"}
 pages = append(pages, page)
-document := map[string]interface{}{"pages": pages, "status": "processed"}
+document := map[string]interface{}{"pages": pages, "status": "processed", "id": id}
 
 result, logic_error := signaturelogic.DocumentsUpdate(document)
 ```
@@ -81,6 +81,14 @@ result, logic_error := signaturelogic.SigningsShow("ID-OF-SIGNING")
 ```go
 signature_element := map[string]interface{}{"x": "20", "y": "20", "url": "data:image/gif;base64,R0lGODlhRAIEAaIAAOLi1v7..", "page_number": "1", "signing_id": "123456"}
 result, logic_error := signaturelogic.SignatureElementsCreate(signature_element)
+```
+
+### SignatureElementsUpdate
+
+```go
+signature_element := map[string]interface{}{"x": "50", "y": "52", "id": "some-id"}
+
+result, logic_error := signaturelogic.SignatureElementsUpdate(signature_element)
 ```
 
 ### TextElementsCreate
