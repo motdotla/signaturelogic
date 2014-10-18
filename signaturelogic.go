@@ -309,6 +309,17 @@ func SignatureElementsUpdate(new_signature_element map[string]interface{}) (map[
 	return signature_element, nil
 }
 
+func SignatureElementsDelete(id string) (map[string]interface{}, *handshakejserrors.LogicError) {
+	conn := Conn()
+	err := conn.Delete(SIGNATURE_ELEMENTS, id)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return map[string]interface{}{"success": "true"}, nil
+}
+
 func TextElementsCreate(text_element map[string]interface{}) (map[string]interface{}, *handshakejserrors.LogicError) {
 	var x string
 	var y string
@@ -436,6 +447,18 @@ func TextElementsUpdate(new_text_element map[string]interface{}) (map[string]int
 
 	return text_element, nil
 }
+
+func TextElementsDelete(id string) (map[string]interface{}, *handshakejserrors.LogicError) {
+	conn := Conn()
+	err := conn.Delete(TEXT_ELEMENTS, id)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return map[string]interface{}{"success": "true"}, nil
+}
+
 func Conn() *gorc.Client {
 	client := gorc.NewClient(ORCHESTRATE_API_KEY)
 	return client

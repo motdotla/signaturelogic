@@ -91,6 +91,12 @@ signature_element := map[string]interface{}{"x": "50", "y": "52", "id": "some-id
 result, logic_error := signaturelogic.SignatureElementsUpdate(signature_element)
 ```
 
+### SignatureElementsDelete
+
+```go
+result, logic_error := signaturelogic.SignatureElementsDelete(id)
+```
+
 ### TextElementsCreate
 
 ```go
@@ -104,6 +110,12 @@ result, logic_error := signaturelogic.TextElementsCreate(text_element)
 text_element := map[string]interface{}{"x": "50", "y": "52", "id": "some-id"}
 
 result, logic_error := signaturelogic.TextElementsUpdate(text_element)
+```
+
+### TextElementsDelete
+
+```go
+result, logic_error := signaturelogic.TextElementsDelete(id)
 ```
 
 ## Installation
