@@ -262,9 +262,31 @@ func TestSigningsShow(t *testing.T) {
 	}
 
 	id := result["id"].(string)
-	result, _ = signaturelogic.SigningsShow(id)
+	result, logic_error = signaturelogic.SigningsShow(id)
+	if logic_error != nil {
+		t.Errorf("SigningsShow failed", logic_error)
+	}
 	if result["document_url"].(string) != DOCUMENT_URL {
 		t.Errorf("returned document_url was incorrect")
+	}
+}
+
+func TestSigningsMarkSigned(t *testing.T) {
+	setup(t)
+	tearDown(t)
+	result, logic_error := createSigning(t)
+	if logic_error != nil {
+		t.Errorf("createSigning failed.")
+	}
+
+	id := result["id"].(string)
+	result, logic_error = signaturelogic.SigningsMarkSigned(id)
+	if logic_error != nil {
+		t.Errorf("SigningsMarkSigned failed", logic_error)
+	}
+
+	if result["status"].(string) != "signed" {
+		t.Errorf("returned status was incorrect")
 	}
 }
 
