@@ -76,6 +76,12 @@ result, logic_error := signaturelogic.SigningsCreate(signing)
 result, logic_error := signaturelogic.SigningsShow("ID-OF-SIGNING")
 ```
 
+### SigningsMarkSigned
+
+```go
+result, logic_error := signaturelogic.SigningsMarkSigned("ID-OF-SIGNING")
+```
+
 ### SignatureElementsCreate
 
 ```go

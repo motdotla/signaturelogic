@@ -164,11 +164,29 @@ func SigningsCreate(signing map[string]interface{}) (map[string]interface{}, *ha
 	signing["signature_elements"] = signature_elements
 	signing["text_elements"] = text_elements
 	signing["document_url"] = document_url
+	signing["status"] = "signing"
 	key := uuid.New()
 	signing["id"] = key
 
 	conn := Conn()
 	_, err := conn.Put(SIGNINGS, signing["id"].(string), signing)
+	if err != nil {
+		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
+		return nil, logic_error
+	}
+
+	return signing, nil
+}
+
+func SigningsMarkSigned(id string) (map[string]interface{}, *handshakejserrors.LogicError) {
+	signing, logic_error := SigningsShow(id)
+	if logic_error != nil {
+		return nil, logic_error
+	}
+	signing["status"] = "signed"
+
+	conn := Conn()
+	_, err := conn.Put(SIGNINGS, id, signing)
 	if err != nil {
 		logic_error := &handshakejserrors.LogicError{"unknown", "", err.Error()}
 		return nil, logic_error

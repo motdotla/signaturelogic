@@ -180,6 +180,9 @@ func TestSigningsCreate(t *testing.T) {
 	if result["id"] == "" {
 		t.Errorf("Missing ID")
 	}
+	if result["status"] != "signing" {
+		t.Errorf("Incorrect status " + result["status"].(string))
+	}
 }
 
 func TestSignatureElementsCreate(t *testing.T) {
